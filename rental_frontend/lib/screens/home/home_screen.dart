@@ -44,10 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _loadProperties,
-        child: _buildBody(),
-      ),
+      body: RefreshIndicator(onRefresh: _loadProperties, child: _buildBody()),
     );
   }
 
@@ -61,11 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red,
-            ),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
               'Error loading properties',
@@ -88,23 +81,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (_properties.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.home_outlined,
-              size: 64,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 16),
-            Text(
+            const Icon(Icons.home_outlined, size: 64, color: Colors.grey),
+            const SizedBox(height: 16),
+            const Text(
               'No properties available',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
+            const SizedBox(height: 16),
+            // refresh
+            ElevatedButton(onPressed: _loadProperties, child: Text('Refresh')),
           ],
         ),
       );
@@ -121,15 +110,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   'Featured Properties',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Discover amazing rental properties',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -144,27 +133,23 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final property = _properties[index];
-                return _PropertyCard(
-                  property: property,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => PropertyDetailScreen(property: property),
-                      ),
-                    );
-                  },
-                );
-              },
-              childCount: _properties.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final property = _properties[index];
+              return _PropertyCard(
+                property: property,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PropertyDetailScreen(property: property),
+                    ),
+                  );
+                },
+              );
+            }, childCount: _properties.length),
           ),
         ),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 16),
-        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
       ],
     );
   }
@@ -174,18 +159,13 @@ class _PropertyCard extends StatelessWidget {
   final Property property;
   final VoidCallback onTap;
 
-  const _PropertyCard({
-    required this.property,
-    required this.onTap,
-  });
+  const _PropertyCard({required this.property, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -197,21 +177,16 @@ class _PropertyCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Colors.blue.shade300,
-                      Colors.blue.shade600,
-                    ],
+                    colors: [Colors.blue.shade300, Colors.blue.shade600],
                   ),
                 ),
-                child: const Icon(
-                  Icons.home,
-                  size: 48,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.home, size: 48, color: Colors.white),
               ),
             ),
             Expanded(

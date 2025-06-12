@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rental_frontend/screens/auth/login_screen.dart';
 import '../../services/auth_service.dart';
 import '../main_screen.dart';
 
@@ -48,8 +49,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       if (user != null && mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MainScreen()),
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (_) => false,
         );
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -79,6 +79,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
             onPressed: () => Navigator.of(context).pop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
             ),
             child: const Text('Yes, Cancel'),
           ),
@@ -135,18 +136,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentUser?.isAdmin == true ? 'All Bookings' : 'My Bookings'),
+        title: Text(
+          _currentUser?.isAdmin == true ? 'All Bookings' : 'My Bookings',
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadBookings,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadBookings),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _loadBookings,
-        child: _buildBody(),
-      ),
+      body: RefreshIndicator(onRefresh: _loadBookings, child: _buildBody()),
     );
   }
 
@@ -160,11 +157,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red,
-            ),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
               'Error loading bookings',
@@ -191,20 +184,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.book_outlined,
-              size: 64,
-              color: Colors.grey,
-            ),
+            const Icon(Icons.book_outlined, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
             Text(
-              _currentUser?.isAdmin == true 
+              _currentUser?.isAdmin == true
                   ? 'No bookings found'
                   : 'You have no bookings yet',
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
             ),
             if (_currentUser?.isAdmin != true) ...[
               const SizedBox(height: 8),
@@ -225,8 +211,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
       itemBuilder: (context, index) {
         final booking = _bookings[index];
         final status = _getBookingStatus(booking);
-        final canCancel = status == 'Upcoming' && 
-            (_currentUser?.isAdmin == true || booking.userId == _currentUser?.userId);
+        final canCancel =
+            status == 'Upcoming' &&
+            (_currentUser?.isAdmin == true ||
+                booking.userId == _currentUser?.userId);
 
         return Card(
           margin: const EdgeInsets.only(bottom: 16),
@@ -241,7 +229,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        booking.propertyName ?? 'Property #${booking.propertyId}',
+                        booking.propertyName ??
+                            'Property #${booking.propertyId}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -274,7 +263,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 ),
                 const SizedBox(height: 8),
                 // User info (for admin view)
-                if (_currentUser?.isAdmin == true && booking.userName != null) ...[
+                if (_currentUser?.isAdmin == true &&
+                    booking.userName != null) ...[
                   Row(
                     children: [
                       const Icon(Icons.person, size: 16, color: Colors.grey),
@@ -293,14 +283,15 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 // Dates
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                    const Icon(
+                      Icons.calendar_today,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${DateFormat('MMM dd, yyyy').format(booking.checkInDate)} - ${DateFormat('MMM dd, yyyy').format(booking.checkOutDate)}',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
                 ),
@@ -311,10 +302,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     const SizedBox(width: 4),
                     Text(
                       '${booking.durationInDays} ${booking.durationInDays == 1 ? 'day' : 'days'}',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
                 ),
@@ -322,10 +310,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 // Booking ID
                 Text(
                   'Booking ID: #${booking.bookingId}',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
                 // Actions
                 if (canCancel) ...[

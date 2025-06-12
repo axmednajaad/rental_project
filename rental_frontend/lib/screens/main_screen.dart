@@ -28,6 +28,18 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _loadCurrentUser() async {
     final user = await AuthService.getCurrentUser();
+
+    // If user exists but has no userId, clear the cached user and force re-login
+    if (user != null && user.userId == null) {
+      print('User has no userId, clearing cached user data');
+      await AuthService.logout();
+      setState(() {
+        _currentUser = null;
+        _isLoading = false;
+      });
+      return;
+    }
+
     setState(() {
       _currentUser = user;
       _isLoading = false;
@@ -52,28 +64,15 @@ class _MainScreenState extends State<MainScreen> {
         const AdminScreen(),
       ];
     } else {
-      return [
-        const HomeScreen(),
-        const SearchScreen(),
-        const BookingsScreen(),
-      ];
+      return [const HomeScreen(), const SearchScreen(), const BookingsScreen()];
     }
   }
 
   List<BottomNavigationBarItem> _getBottomNavItems() {
     List<BottomNavigationBarItem> items = [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'Home',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.search),
-        label: 'Search',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.book),
-        label: 'Bookings',
-      ),
+      const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      const BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+      const BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Bookings'),
     ];
 
     if (_currentUser?.isAdmin == true) {
@@ -91,11 +90,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (_currentUser == null) {
@@ -146,10 +141,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _getScreens(),
-      ),
+      body: IndexedStack(index: _currentIndex, children: _getScreens()),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {

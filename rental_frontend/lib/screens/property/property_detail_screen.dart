@@ -9,10 +9,7 @@ import '../../services/auth_service.dart';
 class PropertyDetailScreen extends StatefulWidget {
   final Property property;
 
-  const PropertyDetailScreen({
-    super.key,
-    required this.property,
-  });
+  const PropertyDetailScreen({super.key, required this.property});
 
   @override
   State<PropertyDetailScreen> createState() => _PropertyDetailScreenState();
@@ -99,6 +96,27 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
       return;
     }
 
+    // Check for null values before proceeding
+    if (widget.property.propertyId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Property ID is missing. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (_currentUser!.userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('User ID is missing. Please login again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     setState(() {
       _isBooking = true;
     });
@@ -110,6 +128,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
         checkInDate: _checkInDate!,
         checkOutDate: _checkOutDate!,
       );
+
+      print('Creating booking with data: ${booking.toJson()}'); // Debug log
 
       await ApiService.createBooking(booking);
 
@@ -123,12 +143,16 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
         Navigator.of(context).pop();
       }
     } catch (e) {
+      print('Booking error: $e'); // Debug log
       if (mounted) {
+        String errorMessage = 'Booking failed';
+        if (e.toString().contains('Exception:')) {
+          errorMessage = e.toString().replaceFirst('Exception: ', '');
+        } else {
+          errorMessage = 'Booking failed: ${e.toString()}';
+        }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Booking failed: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -149,9 +173,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.property.name),
-      ),
+      appBar: AppBar(title: Text(widget.property.name)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,17 +186,10 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Colors.blue.shade300,
-                    Colors.blue.shade600,
-                  ],
+                  colors: [Colors.blue.shade300, Colors.blue.shade600],
                 ),
               ),
-              child: const Icon(
-                Icons.home,
-                size: 100,
-                color: Colors.white,
-              ),
+              child: const Icon(Icons.home, size: 100, color: Colors.white),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -188,13 +203,13 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                       Expanded(
                         child: Text(
                           widget.property.name,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
                       Text(
-                        '\$${widget.property.price.toStringAsFixed(0)}/month',
+                        // '\$${widget.property.price.toStringAsFixed(0)}/month',
+                        '\$${widget.property.price.toStringAsFixed(0)}/day',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -229,8 +244,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                   Text(
                     'Description',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -243,8 +258,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     Text(
                       'Book This Property',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     // Date Selection
@@ -297,7 +312,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 25),
                     ],
                     // Book Button
                     SizedBox(
@@ -343,12 +358,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
             ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
+          Expanded(child: Text(value, style: const TextStyle(fontSize: 16))),
         ],
       ),
     );
@@ -368,10 +378,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
             ),
             const SizedBox(height: 4),
             Text(

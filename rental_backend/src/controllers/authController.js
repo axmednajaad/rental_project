@@ -54,9 +54,12 @@ exports.login = async (req, res) => {
 
     // Validate user credentials
     const user = await User.validatePassword(email, password);
+    console.log('Login attempt for:', email);
+    console.log('User found:', user);
+
     if (!user) {
-      return res.status(401).json({ 
-        error: 'Invalid email or password' 
+      return res.status(401).json({
+        error: 'Invalid email or password'
       });
     }
 

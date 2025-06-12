@@ -14,8 +14,11 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    print('Parsing User from JSON: $json'); // Debug log
+    final userId = json['user_id'] ?? json['id'];
+    print('Extracted userId: $userId'); // Debug log
     return User(
-      userId: json['user_id'],
+      userId: userId,
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
@@ -25,6 +28,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     return {
+      'user_id': userId,
       'name': name,
       'email': email,
       'phone': phone,

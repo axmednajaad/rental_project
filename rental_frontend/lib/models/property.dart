@@ -18,8 +18,9 @@ class Property {
   });
 
   factory Property.fromJson(Map<String, dynamic> json) {
+    print('Parsing Property from JSON: $json'); // Debug log
     return Property(
-      propertyId: json['property_id'],
+      propertyId: json['property_id'] ?? json['id'],
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       type: json['type'] ?? '',

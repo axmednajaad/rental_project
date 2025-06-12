@@ -39,8 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (user != null && mounted) {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const MainScreen()),
+          (_) => false,
         );
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

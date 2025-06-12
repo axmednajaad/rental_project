@@ -31,14 +31,19 @@ class User {
 
   static async validatePassword(email, password) {
     const user = await this.findByEmail(email);
+    console.log('User found by email:', user);
+
     if (!user) {
       return null;
     }
 
     const isValid = await bcrypt.compare(password, user.password);
+    console.log('Password valid:', isValid);
+
     if (isValid) {
       // Return user without password
       const { password: _, ...userWithoutPassword } = user;
+      console.log('User without password:', userWithoutPassword);
       return userWithoutPassword;
     }
     return null;

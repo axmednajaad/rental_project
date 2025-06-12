@@ -28,6 +28,7 @@ class AuthService {
   static Future<User?> login(String email, String password) async {
     try {
       final user = await ApiService.loginUser(email, password);
+      print('Logged in user: $user');
       await saveCurrentUser(user);
       return user;
     } catch (e) {

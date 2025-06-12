@@ -63,6 +63,8 @@ class ApiService {
       body: json.encode({'email': email, 'password': password}),
     );
 
+    print('Login Response: ${response.body}');
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return User.fromJson(data['user']);
@@ -125,6 +127,7 @@ class ApiService {
     final response = await http.get(Uri.parse('$baseUrl/properties'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
+      print('Properties: $data');
       return data.map((json) => Property.fromJson(json)).toList();
     }
     throw Exception('Failed to load properties');
@@ -157,6 +160,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(property.toJson()),
     );
+    print('Property Update Response: ${response.body}');
     if (response.statusCode != 200) {
       throw Exception('Failed to update property');
     }
@@ -164,6 +168,7 @@ class ApiService {
 
   static Future<void> deleteProperty(int id) async {
     final response = await http.delete(Uri.parse('$baseUrl/properties/$id'));
+    print('Property Deletion Response: ${response.body}');
     if (response.statusCode != 200) {
       throw Exception('Failed to delete property');
     }
@@ -172,6 +177,7 @@ class ApiService {
   // Booking endpoints
   static Future<List<Booking>> getBookings() async {
     final response = await http.get(Uri.parse('$baseUrl/bookings'));
+    print('Bookings Response: ${response.body}');
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((json) => Booking.fromJson(json)).toList();
@@ -183,6 +189,7 @@ class ApiService {
     final response = await http.get(
       Uri.parse('$baseUrl/bookings/user/$userId'),
     );
+    print('User Bookings Response: ${response.body}');
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((json) => Booking.fromJson(json)).toList();
@@ -196,6 +203,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(booking.toJson()),
     );
+    print('Booking Creation Response: ${response.body}');
     if (response.statusCode == 201) {
       return Booking.fromJson(json.decode(response.body));
     }
@@ -208,6 +216,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(booking.toJson()),
     );
+    print('Booking Update Response: ${response.body}');
     if (response.statusCode != 200) {
       throw Exception('Failed to update booking');
     }
