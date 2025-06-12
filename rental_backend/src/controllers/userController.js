@@ -2,8 +2,25 @@ const User = require('../models/User');
 
 exports.createUser = async (req, res) => {
   try {
-    const userId = await User.create(req.body);
-    res.status(201).json({ id: userId, ...req.body });
+    console.log('Creating user with data:', req.body);
+    // check if the user with this email already exists
+    const existingUser = await User.findByEmail(req.body.email);
+    if (existingUser) {
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
+
+    const { password, ...userData } = req.body;
+
+    // If password is provided, include it; otherwise, set a default
+    const userDataWithPassword = {
+      ...userData,
+      password: password || '123' // You might want to handle this differently
+    };
+
+    const userId = await User.create(userDataWithPassword);
+
+    // Return user data without password
+    res.status(201).json({ id: userId, ...userData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
