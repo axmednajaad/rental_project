@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../models/property.dart';
 import '../../services/api_service.dart';
@@ -186,7 +187,15 @@ class _PropertyCard extends StatelessWidget {
                     colors: [Colors.blue.shade300, Colors.blue.shade600],
                   ),
                 ),
-                child: const Icon(Icons.home, size: 48, color: Colors.white),
+                // child: const Icon(Icons.home, size: 48, color: Colors.white),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://images.unsplash.com/photo-1602941525421-8f8b81d3edbb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb3BlcnR5fGVufDB8fDB8fHww",
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
             ),
             Expanded(

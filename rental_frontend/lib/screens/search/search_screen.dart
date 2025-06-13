@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../models/property.dart';
 import '../../services/api_service.dart';
@@ -56,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
         _allProperties = properties;
         _filteredProperties = properties;
         _isLoading = false;
-        
+
         // Update price range based on actual data
         if (properties.isNotEmpty) {
           final prices = properties.map((p) => p.price).toList();
@@ -75,19 +76,22 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _filterProperties() {
     final query = _searchController.text.toLowerCase();
-    
+
     setState(() {
       _filteredProperties = _allProperties.where((property) {
-        final matchesSearch = property.name.toLowerCase().contains(query) ||
+        final matchesSearch =
+            property.name.toLowerCase().contains(query) ||
             property.location.toLowerCase().contains(query) ||
             property.description.toLowerCase().contains(query);
-        
-        final matchesType = _selectedType == 'All' || 
+
+        final matchesType =
+            _selectedType == 'All' ||
             property.type.toLowerCase() == _selectedType.toLowerCase();
-        
-        final matchesPrice = property.price >= _priceRange.start && 
+
+        final matchesPrice =
+            property.price >= _priceRange.start &&
             property.price <= _priceRange.end;
-        
+
         return matchesSearch && matchesType && matchesPrice;
       }).toList();
     });
@@ -114,13 +118,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   value: _selectedType,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                   ),
                   items: _propertyTypes.map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Text(type),
-                    );
+                    return DropdownMenuItem(value: type, child: Text(type));
                   }).toList(),
                   onChanged: (value) {
                     setDialogState(() {
@@ -251,9 +255,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
           // Results
-          Expanded(
-            child: _buildResults(),
-          ),
+          Expanded(child: _buildResults()),
         ],
       ),
     );
@@ -269,11 +271,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red,
-            ),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
               'Error loading properties',
@@ -300,20 +298,13 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.search_off,
-              size: 64,
-              color: Colors.grey,
-            ),
+            const Icon(Icons.search_off, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
             Text(
-              _allProperties.isEmpty 
+              _allProperties.isEmpty
                   ? 'No properties available'
                   : 'No properties match your search',
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
             ),
             if (_allProperties.isNotEmpty) ...[
               const SizedBox(height: 8),
@@ -351,10 +342,7 @@ class _PropertyListItem extends StatelessWidget {
   final Property property;
   final VoidCallback onTap;
 
-  const _PropertyListItem({
-    required this.property,
-    required this.onTap,
-  });
+  const _PropertyListItem({required this.property, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -376,16 +364,17 @@ class _PropertyListItem extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Colors.blue.shade300,
-                      Colors.blue.shade600,
-                    ],
+                    colors: [Colors.blue.shade300, Colors.blue.shade600],
                   ),
                 ),
-                child: const Icon(
-                  Icons.home,
-                  color: Colors.white,
-                  size: 32,
+                // child: const Icon(Icons.home, color: Colors.white, size: 32),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://images.unsplash.com/photo-1602941525421-8f8b81d3edbb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb3BlcnR5fGVufDB8fDB8fHww",
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               const SizedBox(width: 16),
@@ -424,10 +413,7 @@ class _PropertyListItem extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '${property.type} • ${property.size}',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     const SizedBox(height: 8),
                     Text(

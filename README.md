@@ -41,7 +41,7 @@ A full-stack rental management application with Node.js/Express backend and Flut
 
 - **Framework**: Flutter (Dart SDK ^3.8.1)
 - **UI**: Material Design 3
-- **State Management**: setState
+<!-- - **State Management**: setState -->
 - **HTTP Client**: http package
 - **Storage**: SharedPreferences for auth persistence
 

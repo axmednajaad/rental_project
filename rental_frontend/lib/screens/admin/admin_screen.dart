@@ -4,6 +4,7 @@ import '../../models/user.dart';
 import '../../services/api_service.dart';
 import 'property_management_screen.dart';
 import 'user_management_screen.dart';
+import 'booking_reports_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -71,8 +72,8 @@ class _AdminScreenState extends State<AdminScreen> {
               Text(
                 'Overview',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 16),
               if (_isLoading)
@@ -112,8 +113,8 @@ class _AdminScreenState extends State<AdminScreen> {
               Text(
                 'Management',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 16),
               _ManagementCard(
@@ -122,11 +123,14 @@ class _AdminScreenState extends State<AdminScreen> {
                 icon: Icons.home_work,
                 color: Colors.blue,
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const PropertyManagementScreen(),
-                    ),
-                  ).then((_) => _loadStatistics());
+                  Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const PropertyManagementScreen(),
+                        ),
+                      )
+                      .then((_) => _loadStatistics());
                 },
               ),
               const SizedBox(height: 16),
@@ -136,11 +140,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 icon: Icons.people_alt,
                 color: Colors.green,
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const UserManagementScreen(),
-                    ),
-                  ).then((_) => _loadStatistics());
+                  Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (context) => const UserManagementScreen(),
+                        ),
+                      )
+                      .then((_) => _loadStatistics());
                 },
               ),
               const SizedBox(height: 16),
@@ -150,12 +156,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 icon: Icons.analytics,
                 color: Colors.purple,
                 onTap: () {
-                  // Navigate to booking reports (can be implemented later)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Booking reports feature coming soon!'),
-                    ),
-                  );
+                  Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (context) => const BookingReportsScreen(),
+                        ),
+                      )
+                      .then((_) => _loadStatistics());
                 },
               ),
             ],
@@ -194,11 +201,7 @@ class _StatCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  icon,
-                  color: color,
-                  size: 32,
-                ),
+                Icon(icon, color: color, size: 32),
                 Text(
                   value,
                   style: TextStyle(
@@ -212,10 +215,7 @@ class _StatCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -256,11 +256,7 @@ class _ManagementCard extends StatelessWidget {
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 24,
-                ),
+                child: Icon(icon, color: color, size: 24),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -277,19 +273,12 @@ class _ManagementCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
                 ),
               ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey,
-                size: 16,
-              ),
+              const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
             ],
           ),
         ),
